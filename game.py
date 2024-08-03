@@ -125,12 +125,12 @@ def create_squares(space, width, height):
         shape.collision_type = 2
         space.add(body, shape)
 
-def create_structure(space, width, height, sheep_image, hillary_image, kamala_image, level):
+def create_structure(space, width, height, sheep_image, level):
     ball_radius = 20
-    ball_mass = 10
-    num_balls = 6 + level * 2 # Increase the number of balls with each level
+    ball_mass = 100
+    num_balls = 6 + level * 2  # Increase the number of balls with each level
 
-    blue_balls_with_images = []
+    blue_balls = []
     for _ in range(num_balls):
         x = random.randint(ball_radius, width - ball_radius)
         y = random.randint(ball_radius, height - ball_radius)
@@ -151,15 +151,9 @@ def create_structure(space, width, height, sheep_image, hillary_image, kamala_im
         body.velocity = (velocity_x, velocity_y)
         
         space.add(body, shape)
-
-        # Randomly choose an image
-        image = random.choice([sheep_image, hillary_image, kamala_image])
-        
-        # Append the shape and the selected image to the list
-        blue_balls_with_images.append((shape, image))
+        blue_balls.append((shape, sheep_image))
     
-    return blue_balls_with_images
-
+    return blue_balls
 
 
 
@@ -240,15 +234,11 @@ async def main(window, width, height):
         space = pymunk.Space()
         space.gravity = (0, 0)
 
-        player_image = pygame.image.load('trump2.png')
-        player_image = pygame.transform.scale(player_image, (75, 85))
-        sheep_image = pygame.image.load('biden2.png')
-        hillary_image = pygame.image.load('hillary.png')
-        hillary_image = pygame.transform.scale(hillary_image, (75, 75))
-        kamala_image = pygame.image.load('kamala.png')
-        kamala_image = pygame.transform.scale(kamala_image, (75, 75))
-        sheep_image = pygame.transform.scale(sheep_image, (85, 85))
-        background_image = pygame.image.load('whitehouse.jpg')
+        player_image = pygame.image.load('dog.png')
+        player_image = pygame.transform.scale(player_image, (75, 75))
+        sheep_image = pygame.image.load('sheep.png')
+        sheep_image = pygame.transform.scale(sheep_image, (75, 75))
+        background_image = pygame.image.load('grass.jpg')
         background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 
         while run and level <= max_level:
@@ -257,7 +247,7 @@ async def main(window, width, height):
             space.gravity = (0, 0)
             create_boundaries(space, width, height)
             create_squares(space, width, height)
-            blue_balls = create_structure(space, width, height, sheep_image, hillary_image, kamala_image, level)
+            blue_balls = create_structure(space, width, height, sheep_image, level)
             player_square = create_player_square(space, width, height)
 
             draw_options = pymunk.pygame_util.DrawOptions(window)
